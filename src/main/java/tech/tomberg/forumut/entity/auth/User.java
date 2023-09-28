@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import tech.tomberg.forumut.entity.forum.Specialization;
+import tech.tomberg.forumut.entity.forum.Comment;
+import tech.tomberg.forumut.entity.forum.Post;
 
 import java.time.LocalDate;
 import java.util.Collection;
@@ -25,6 +28,15 @@ public class User implements UserDetails {
     private String lastName;
     private String fullName;
     private LocalDate dateOfBirth;
+    @OneToMany(mappedBy = "author")
+    @ToString.Exclude
+    private List<Post> posts;
+    @OneToMany(mappedBy = "author")
+    @ToString.Exclude
+    private List<Comment> comments;
+    @OneToOne
+    private Specialization specialization;
+    private boolean allowedToComment;
     @ManyToMany
     @JoinTable(
             name = "user_roles",
