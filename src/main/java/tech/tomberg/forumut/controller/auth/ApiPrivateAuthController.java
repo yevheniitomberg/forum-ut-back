@@ -3,18 +3,14 @@ package tech.tomberg.forumut.controller.auth;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import tech.tomberg.forumut.dto.auth.TokenUserDto;
 import tech.tomberg.forumut.dto.response.CustomResponse;
 import tech.tomberg.forumut.entity.auth.User;
 import tech.tomberg.forumut.jwt.JwtUserDetailsService;
 import tech.tomberg.forumut.jwt.TokenManager;
 
-@Controller
+@RestController
 @RequestMapping("api/private")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
