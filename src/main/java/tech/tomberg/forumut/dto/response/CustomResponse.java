@@ -13,7 +13,13 @@ import java.util.HashMap;
 @Builder
 public class CustomResponse {
     private String message;
+    private boolean error;
     private HashMap<Object, Object> data;
+    public CustomResponse(String message, boolean error) {
+        this.message = message;
+        this.error = error;
+        this.data = new HashMap<>();
+    }
     public CustomResponse(String message, Object... args) {
         this.message = message;
         this.data = new HashMap<>();
