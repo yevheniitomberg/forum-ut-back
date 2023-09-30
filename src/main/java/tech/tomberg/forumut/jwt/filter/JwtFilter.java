@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,7 +28,7 @@ public class JwtFilter extends OncePerRequestFilter {
     private final TokenManager tokenManager;
     @Override
     protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response, FilterChain filterChain)
+                                    @NonNull HttpServletResponse response, @NonNull FilterChain filterChain)
             throws ServletException, IOException {
 
         String tokenHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
@@ -42,13 +43,7 @@ public class JwtFilter extends OncePerRequestFilter {
         if (token != null) {
             try {
                 username = tokenManager.getUsernameFromToken(token);
-            } catch (IllegalArgumentException e) {
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED,"Unable to get JWT Token");
-            } catch (ExpiredJwtException e) {
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED,"Token expired!");
-            } catch (MalformedJwtException e) {
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED,"Invalid token!");
-            }
+            } catch (IllegalArgumentException | ExpiredJwtException | MalformedJwtException ignored) {}
             if (null != username && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                 if (tokenManager.validateJwtToken(token, userDetails)) {

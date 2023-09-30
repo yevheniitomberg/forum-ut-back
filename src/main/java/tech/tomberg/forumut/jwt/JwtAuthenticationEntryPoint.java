@@ -13,6 +13,7 @@ import tech.tomberg.forumut.dto.response.CustomResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.util.HashMap;
 
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint,
@@ -21,11 +22,14 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint,
     public void commence(HttpServletRequest request, HttpServletResponse
             response,
                          AuthenticationException authException) throws IOException {
-        CustomResponse re = new CustomResponse("Authentication failed", "status", HttpStatus.UNAUTHORIZED.toString());
+        HashMap<Object, Object> data = new HashMap<>(){};
+        data.put("status", HttpStatus.UNAUTHORIZED.toString());
+        CustomResponse re = CustomResponse.builder().message("Authentication failed").error(true).data(data).build();
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         OutputStream responseStream = response.getOutputStream();
         ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(responseStream, re);
+        responseStream.flush();
     }
 }
