@@ -1,5 +1,6 @@
 package tech.tomberg.forumut.entity.forum;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import tech.tomberg.forumut.entity.auth.User;
@@ -19,6 +20,7 @@ public class Comment {
     private Long id;
     @ManyToOne
     @JoinColumn(name="user_id", nullable=false)
+    @JsonIgnore
     private User author;
     private String content;
     private LocalDateTime publicationDate;
